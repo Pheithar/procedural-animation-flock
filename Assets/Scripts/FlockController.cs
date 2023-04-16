@@ -45,7 +45,7 @@ public class FlockController : MonoBehaviour
     private void Start() {
         Random.InitState(Seed);
         for (int i = 0; i < NumberBoids; i++) {
-            Vector3 initPos = new Vector3(Random.Range(-50f, 50f), 3f, Random.Range(-50f, 50f));
+            Vector3 initPos = new Vector3(Random.Range(-40f, 40f), 3f, Random.Range(-40f, 40f));
             Instantiate(BoidPrefab, initPos, Quaternion.identity);
         }
     }

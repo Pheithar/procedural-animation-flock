@@ -127,11 +127,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a26305b6dea49bc72abefa215f030df5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _avoidFactor: 1
-  _matchingFactor: 1
-  _centeringFactor: 0.1
-  _maxSpeed: 5
-  _protectedRange: 8
-  _visibleRange: 40
+  _avoidFactor: 0.05
+  _matchingFactor: 0.05
+  _centeringFactor: 0.0005
+  _protectedRange: 15
+  _visibleRange: 25
+  _maxSpeed: 50
+  _minSpeed: 20
   _rb: {fileID: 5125683183378784182}
   _drawGizmos: 1

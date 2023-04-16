@@ -24,12 +24,6 @@ public class Boid : MonoBehaviour
         set { _centeringFactor = value; }
     }
 
-    [SerializeField] private float _maxSpeed = 5f;
-    public float MaxSpeed {
-        get { return _maxSpeed; }
-        set { _maxSpeed = value; }
-    }
-
     [SerializeField] private float _protectedRange;
     public float ProtectedRange {
         get { return _protectedRange; }
@@ -40,6 +34,18 @@ public class Boid : MonoBehaviour
     public float VisibleRange {
         get { return _visibleRange; }
         set { _visibleRange = value; }
+    }
+
+    [SerializeField] private float _maxSpeed;
+    public float MaxSpeed {
+        get { return _maxSpeed; }
+        set { _maxSpeed = value; }
+    }
+
+    [SerializeField] private float _minSpeed;
+    public float MinSpeed {
+        get { return _minSpeed; }
+        set { _minSpeed = value; }
     }
 
     [SerializeField] private Rigidbody _rb;
@@ -66,6 +72,12 @@ public class Boid : MonoBehaviour
     private List<Boid> BoidsInVisibleRange {
         get { return _boidsInVisibleRange; }
         set { _boidsInVisibleRange = value; }
+    }
+
+    private List<Vector3> _obstacles = new List<Vector3>();
+    private List<Vector3> Obstacles {
+        get { return _obstacles; }
+        set { _obstacles = value; }
     }
 
     // Public Functions
@@ -97,6 +109,26 @@ public class Boid : MonoBehaviour
                 } else if (distance < VisibleRange) {
                     BoidsInVisibleRange.Add(boid);
                 }
+            }
+        }
+    }
+
+    /* 
+    Detects obstacles from the map.
+
+    Args:
+    -----
+
+    Returns:
+    --------
+        void
+    */
+    private void DetectObstacles() {
+        Obstacles.Clear();
+        Collider[] colliders = Physics.OverlapSphere(transform.position, ProtectedRange);
+        foreach (Collider collider in colliders) {
+            if (collider.CompareTag("Obstacle")) {
+                Obstacles.Add(collider.transform.position);
             }
         }
     }
@@ -167,6 +199,25 @@ public class Boid : MonoBehaviour
         return avoidVector;
     }
 
+    /* 
+    Avoids obstacles. 
+
+    Args:
+    -----
+
+    Returns:
+    --------
+        Vector3: The velocity vector of the boid
+    */
+    private Vector3 AvoidObstacles() {
+        Vector3 avoidVector = Vector3.zero;
+        foreach (Vector3 obstacle in Obstacles) {
+            avoidVector += transform.position - obstacle;
+        }
+        // Debug.Log(avoidVector);
+        return avoidVector;
+    }
+
     /*
     Fixed update function that updates the boid velocity.
     The object will always face the movement direction.
@@ -180,14 +231,29 @@ public class Boid : MonoBehaviour
     */
     private void FixedUpdate() {
         DetectBoids();
+        DetectObstacles();
 
         Vector3 cohesionVector = Cohesion() * CenteringFactor;
         Vector3 alignmentVector = Alignment() * MatchingFactor;
         Vector3 avoidVector = Separation() * AvoidFactor;
+        Vector3 avoidObstacleVector = AvoidObstacles() * AvoidFactor;
 
-        Vector3 velocity = cohesionVector + alignmentVector + avoidVector;
+        // New velocity
+        Vector3 velocity = cohesionVector + alignmentVector + avoidVector + avoidObstacleVector;
 
-        float speed = 
+        // Use previous velocity
+        velocity += Rb.velocity;
+
+        // Discard the y component
+        velocity.y = 0;
+
+        float speed = velocity.magnitude;
+        
+        if (speed > MaxSpeed) {
+            velocity = velocity.normalized * MaxSpeed;
+        } else if (speed < MinSpeed) {
+            velocity = velocity.normalized * MinSpeed;
+        }
 
         Rb.velocity = new Vector3(velocity.x, Rb.velocity.y, velocity.z);
 
