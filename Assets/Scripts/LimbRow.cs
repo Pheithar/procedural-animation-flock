@@ -26,6 +26,8 @@ public class LimbRow
     }
 
     [SerializeField] private float _stepDistance = 1f;
+    [SerializeField] private float _stepHeight = 1f;
+    [SerializeField] private float _stepSpeed = 1f;
 
     // Variables
     // ---------
@@ -56,6 +58,10 @@ public class LimbRow
         get { return _leftOffset; }
         set { _leftOffset = value; }
     }
+
+    // Linear interpolation variables
+    private float _rightLerp;
+    private float _leftLerp;
 
 
     // Public Functions
@@ -99,22 +105,36 @@ public class LimbRow
 
     Args:
     -----
+        float time: The time since the last frame.
 
     Returns:
     --------
         void
     */
-    public void SetTargetPositions() {
+    public void SetTargetPositions(float time) {
         float rightDistance = Vector3.Distance(_rightCurrentPosition, _rightNewPosition);
         float leftDistance = Vector3.Distance(_leftCurrentPosition, _leftNewPosition);
-        // Debug.Log(rightDistance);
+        Debug.Log(rightDistance);
 
         if (rightDistance > _stepDistance) {
-            _rightCurrentPosition = _rightNewPosition;
+            _rightLerp = 0f;
         }
 
-        if (leftDistance > _stepDistance) {
-            _leftCurrentPosition = _leftNewPosition;
+        // if (leftDistance > _stepDistance) {
+        //     _leftCurrentPosition = _leftNewPosition;
+        // }
+
+        if (_rightLerp <= 1f) {
+            Debug.Log("Right lerp: " + _rightLerp);
+            _rightCurrentPosition = Vector3.Lerp(_rightCurrentPosition, _rightNewPosition, _rightLerp);
+            _rightCurrentPosition.y = Mathf.Sin(_rightLerp * Mathf.PI) * _stepHeight;
+            _rightLerp += time * _stepSpeed;
+        }
+
+        if (_leftLerp <= 1f) {
+            _leftCurrentPosition = Vector3.Lerp(_leftCurrentPosition, _leftNewPosition, _leftLerp);
+            _leftCurrentPosition.y = Mathf.Sin(_leftLerp * Mathf.PI) * _stepHeight;
+            _leftLerp += time * _stepSpeed;
         }
 
         RightTarget.position = _rightCurrentPosition;
