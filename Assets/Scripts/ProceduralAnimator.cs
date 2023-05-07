@@ -107,30 +107,30 @@ public class ProceduralAnimator : MonoBehaviour
         Velocity = transform.position - _previousPosition;
         
 
-        if (UserControlled && Input.GetMouseButtonDown(0)) {
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, TerrainLayerMask)) {
-                _targetPosition = hit.point + Vector3.up * 1.5f;
+        // if (UserControlled && Input.GetMouseButtonDown(0)) {
+        //     Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+        //     RaycastHit hit;
+        //     if (Physics.Raycast(ray, out hit, Mathf.Infinity, TerrainLayerMask)) {
+        //         _targetPosition = hit.point + Vector3.up * 1.5f;
 
-                // Rotate the character to face the target position. Then rotate 180 degrees to face the opposite direction, because the character is facing the wrong way.
-                // transform.rotation = Quaternion.LookRotation(_targetPosition - transform.position, Vector3.up) * Quaternion.Euler(0, 180, 0);
-            }
-        }
+        //         // Rotate the character to face the target position. Then rotate 180 degrees to face the opposite direction, because the character is facing the wrong way.
+        //         // transform.rotation = Quaternion.LookRotation(_targetPosition - transform.position, Vector3.up) * Quaternion.Euler(0, 180, 0);
+        //     }
+        // }
 
-        // Move toward the target position until the target position is reached (margin of 0.1f)
-        if (Vector3.Distance(transform.position, _targetPosition) > 0.1f) {
-            Vector3 newDirection = Vector3.RotateTowards(transform.forward, _targetPosition - transform.position, RotationSpeed * Time.deltaTime, 0.0f);
-            transform.rotation = Quaternion.LookRotation(newDirection);
+        // // Move toward the target position until the target position is reached (margin of 0.1f)
+        // if (Vector3.Distance(transform.position, _targetPosition) > 0.1f) {
+        //     Vector3 newDirection = Vector3.RotateTowards(transform.forward, _targetPosition - transform.position, RotationSpeed * Time.deltaTime, 0.0f);
+        //     transform.rotation = Quaternion.LookRotation(newDirection);
 
-            // Raycast to the ground to check if the character is on the ground. If not, move it towards the ground.
-            transform.position = Vector3.MoveTowards(transform.position, _targetPosition, Speed * Time.deltaTime);
+        //     // Raycast to the ground to check if the character is on the ground. If not, move it towards the ground.
+        //     transform.position = Vector3.MoveTowards(transform.position, _targetPosition, Speed * Time.deltaTime);
             
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, TerrainLayerMask)) {
-                transform.position = new Vector3(transform.position.x, hit.point.y + 1.5f, transform.position.z);
-            }
-        }
+        //     RaycastHit hit;
+        //     if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, TerrainLayerMask)) {
+        //         transform.position = new Vector3(transform.position.x, hit.point.y + 1.5f, transform.position.z);
+        //     }
+        // }
 
         _previousPosition = transform.position;
 

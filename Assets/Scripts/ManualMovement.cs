@@ -56,8 +56,8 @@ public class ManualMovement : MonoBehaviour
 
         Rb.velocity = new Vector3(horizontalInput * Speed, Rb.velocity.y, verticalInput * Speed);
         if (Mathf.Abs(Rb.velocity.x) > 0.1f || Mathf.Abs(Rb.velocity.z) > 0.1f) {
-            Vector3 lookDirection = new Vector3(Rb.velocity.x, 0, Rb.velocity.z);
-            transform.rotation = Quaternion.LookRotation(lookDirection, transform.forward);
+            Vector3 lookDirection = -1 * new Vector3(Rb.velocity.x, 0, Rb.velocity.z);
+            transform.rotation = Quaternion.LookRotation(lookDirection, transform.up);
         }
 
         // Apply additional gravity

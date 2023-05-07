@@ -95,7 +95,7 @@ public class ProceduralLeg : MonoBehaviour
     */
     private void Start() {
         // Set default position
-        DefaultPosition = Body.transform.localPosition + transform.localPosition;
+        DefaultPosition = transform.localPosition;
         // Positions
         CurrentPosition = transform.position;
         NewPosition = transform.position;
@@ -115,7 +115,7 @@ public class ProceduralLeg : MonoBehaviour
         transform.position = CurrentPosition;
 
         // Position on the ground
-        Vector3 desiredPosition = Body.transform.TransformPoint(DefaultPosition);
+        Vector3 desiredPosition = Body.transform.position + Body.transform.TransformDirection(DefaultPosition);
         Vector3 BodyVelocity = Body.Velocity;
         RaycastHit hit;
         Ray ray = new Ray(desiredPosition + BodyVelocity + Vector3.up * 3f, Vector3.down);
@@ -144,7 +144,7 @@ public class ProceduralLeg : MonoBehaviour
     private void OnDrawGizmos() {
         // offset
         Gizmos.color = Color.green;
-        Gizmos.DrawLine(Body.transform.position, DefaultPosition);
+        Gizmos.DrawLine(Body.transform.position, Body.transform.position + Body.transform.TransformDirection(DefaultPosition));
         // current position
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(CurrentPosition, 0.1f);

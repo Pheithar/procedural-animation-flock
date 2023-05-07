@@ -258,8 +258,8 @@ public class Boid : MonoBehaviour
         Rb.velocity = new Vector3(velocity.x, Rb.velocity.y, velocity.z);
 
         if (Mathf.Abs(Rb.velocity.x) > 0.1f || Mathf.Abs(Rb.velocity.z) > 0.1f) {
-            Vector3 lookDirection = new Vector3(Rb.velocity.x, 0, Rb.velocity.z);
-            transform.rotation = Quaternion.LookRotation(lookDirection, transform.forward);
+            Vector3 lookDirection = new Vector3(Rb.velocity.x, 0, Rb.velocity.z) * -1;
+            transform.rotation = Quaternion.LookRotation(lookDirection, transform.up);
         }
 
         // // Apply additional gravity
@@ -283,6 +283,18 @@ public class Boid : MonoBehaviour
 
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, VisibleRange);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, transform.position + transform.forward * 3);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, transform.position + transform.up * 3);
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(transform.position, transform.position + transform.right * 3);
+
+            Gizmos.color = Color.white;
+            Gizmos.DrawLine(transform.position, transform.position + Vector3.down * 3);
         }
 
     }
