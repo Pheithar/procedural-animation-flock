@@ -6,43 +6,43 @@ public class Boid : MonoBehaviour
 {
     // Serialized Fields
     // -----------------
-    [SerializeField] private float _avoidFactor = 1f;
+    [SerializeField] private float _avoidFactor = 0.2f;
     public float AvoidFactor {
         get { return _avoidFactor; }
         set { _avoidFactor = value; }
     }
 
-    [SerializeField] private float _matchingFactor = 1f;
+    [SerializeField] private float _matchingFactor = 0.05f;
     public float MatchingFactor {
         get { return _matchingFactor; }
         set { _matchingFactor = value; }
     }
 
-    [SerializeField] private float _centeringFactor = 1f;
+    [SerializeField] private float _centeringFactor = 0.005f;
     public float CenteringFactor {
         get { return _centeringFactor; }
         set { _centeringFactor = value; }
     }
 
-    [SerializeField] private float _protectedRange;
+    [SerializeField] private float _protectedRange = 7f;
     public float ProtectedRange {
         get { return _protectedRange; }
         set { _protectedRange = value; }
     }
 
-    [SerializeField] private float _visibleRange;
+    [SerializeField] private float _visibleRange = 20f;
     public float VisibleRange {
         get { return _visibleRange; }
         set { _visibleRange = value; }
     }
 
-    [SerializeField] private float _maxSpeed;
+    [SerializeField] private float _maxSpeed = 20f;
     public float MaxSpeed {
         get { return _maxSpeed; }
         set { _maxSpeed = value; }
     }
 
-    [SerializeField] private float _minSpeed;
+    [SerializeField] private float _minSpeed = 7.5f;
     public float MinSpeed {
         get { return _minSpeed; }
         set { _minSpeed = value; }

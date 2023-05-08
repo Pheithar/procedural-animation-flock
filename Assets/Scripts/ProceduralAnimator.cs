@@ -7,7 +7,11 @@ public class ProceduralAnimator : MonoBehaviour
     // Serialized Fields
     // -----------------
     [Header("Legs")]
-    [SerializeField] private ProceduralLeg[] _legs;
+    [SerializeField] private List<ProceduralLeg> _legs;
+    public List<ProceduralLeg> Legs {
+        get { return _legs; }
+        set { _legs = value; }
+    }
 
     [Header("Properties")]
     [SerializeField] private float _speed = 5f;
@@ -22,17 +26,11 @@ public class ProceduralAnimator : MonoBehaviour
         set { _rotationSpeed = value; }
     }
 
-    [Header("Additional parameters and user interaction")]
+    [Header("Additional parameters")]
     [SerializeField] private LayerMask _terrainLayerMask;
     public LayerMask TerrainLayerMask {
         get { return _terrainLayerMask; }
         set { _terrainLayerMask = value; }
-    }
-
-    [SerializeField] private bool _userControlled = false;
-    public bool UserControlled {
-        get { return _userControlled; }
-        set { _userControlled = value; }
     }
 
     
@@ -85,53 +83,27 @@ public class ProceduralAnimator : MonoBehaviour
         bool anyLegMoving = false;
         int legToMove = 0;
         float maxDistance = 0f;
-        for (int i = 0; i < _legs.Length; i++) {
-            if (_legs[i].IsMoving) {
+        for (int i = 0; i < Legs.Count; i++) {
+            if (Legs[i].IsMoving) {
                 anyLegMoving = true;
                 break;
             }
             else {
-                if (_legs[i].DistanceToObjective > maxDistance) {
-                    maxDistance = _legs[i].DistanceToObjective;
+                if (Legs[i].DistanceToObjective > maxDistance) {
+                    maxDistance = Legs[i].DistanceToObjective;
                     legToMove = i;
                 }
             }
         }
 
         if (!anyLegMoving) {
-            for (int i = 0; i < _legs.Length; i++) {
-                _legs[i].CanMove = i == legToMove;
+            for (int i = 0; i < Legs.Count; i++) {
+                Legs[i].CanMove = i == legToMove;
             }
         }
 
         Velocity = transform.position - _previousPosition;
         
-
-        // if (UserControlled && Input.GetMouseButtonDown(0)) {
-        //     Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-        //     RaycastHit hit;
-        //     if (Physics.Raycast(ray, out hit, Mathf.Infinity, TerrainLayerMask)) {
-        //         _targetPosition = hit.point + Vector3.up * 1.5f;
-
-        //         // Rotate the character to face the target position. Then rotate 180 degrees to face the opposite direction, because the character is facing the wrong way.
-        //         // transform.rotation = Quaternion.LookRotation(_targetPosition - transform.position, Vector3.up) * Quaternion.Euler(0, 180, 0);
-        //     }
-        // }
-
-        // // Move toward the target position until the target position is reached (margin of 0.1f)
-        // if (Vector3.Distance(transform.position, _targetPosition) > 0.1f) {
-        //     Vector3 newDirection = Vector3.RotateTowards(transform.forward, _targetPosition - transform.position, RotationSpeed * Time.deltaTime, 0.0f);
-        //     transform.rotation = Quaternion.LookRotation(newDirection);
-
-        //     // Raycast to the ground to check if the character is on the ground. If not, move it towards the ground.
-        //     transform.position = Vector3.MoveTowards(transform.position, _targetPosition, Speed * Time.deltaTime);
-            
-        //     RaycastHit hit;
-        //     if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, TerrainLayerMask)) {
-        //         transform.position = new Vector3(transform.position.x, hit.point.y + 1.5f, transform.position.z);
-        //     }
-        // }
-
         _previousPosition = transform.position;
 
     }

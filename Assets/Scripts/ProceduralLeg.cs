@@ -6,17 +6,17 @@ public class ProceduralLeg : MonoBehaviour
 {
     // Serialized Fields
     // -----------------
-    [SerializeField] private float _stepDistance = 0.5f;
+    [SerializeField] private float _stepDistance = 0.75f;
     public float StepDistance {
         get { return _stepDistance; }
         set { _stepDistance = value; }
     }
-    [SerializeField] private float _stepHeight = 0.2f;
+    [SerializeField] private float _stepHeight = 0.3f;
     public float StepHeight {
         get { return _stepHeight; }
         set { _stepHeight = value; }
     }
-    [SerializeField] private float _stepSpeed = 10f;
+    [SerializeField] private float _stepSpeed = 5f;
     public float StepSpeed {
         get { return _stepSpeed; }
         set { _stepSpeed = value; }
