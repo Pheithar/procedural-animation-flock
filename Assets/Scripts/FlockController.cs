@@ -21,11 +21,6 @@ public class FlockController : MonoBehaviour
         set { _seed = value; }
     }
 
-    [SerializeField] private Boid _boidPrefab;
-    public Boid BoidPrefab {
-        get { return _boidPrefab; }
-    } 
-
     [SerializeField] private string _path;
     public string Path {
         get { return _path; }
@@ -52,10 +47,7 @@ public class FlockController : MonoBehaviour
     */
     private void Start() {
         Random.InitState(Seed);
-        // for (int i = 0; i < NumberBoids; i++) {
-        //     Vector3 initPos = new Vector3(Random.Range(-40f, 40f), 5f, Random.Range(-40f, 40f));
-        //     Instantiate(BoidPrefab, initPos, Quaternion.identity);
-        // }
+   
         // Load all not working, iterate through path and load all prefabs
         List<GameObject> boids = new List<GameObject>();
 
@@ -70,12 +62,15 @@ public class FlockController : MonoBehaviour
             }
         }
 
-        GameObject test = Instantiate(boids[0], new Vector3(1, 1, 1), Quaternion.identity);
-        AddRigidBodyBoxCollider(test);
-        List<GameObject> legs = GetLegs(test);
-        AddRig(test, legs);
-        AddBoid(test);
-
+        for (int i = 0; i < NumberBoids; i++) {
+            // Select a random boid
+            int index = Random.Range(0, boids.Count);
+            GameObject boid = Instantiate(boids[index], new Vector3(Random.Range(-40f, 40f), 5f, Random.Range(-40f, 40f)), Quaternion.identity);
+            AddRigidBodyBoxCollider(boid);
+            List<GameObject> legs = GetLegs(boid);
+            AddRig(boid, legs);
+            AddBoid(boid);
+        }
     }
 
     /*
@@ -182,7 +177,7 @@ public class FlockController : MonoBehaviour
             proceduralLeg.TerrainLayerMask = LayerMask.GetMask("Terrain");
             proceduralLeg.StepDistance = 0.75f;
             proceduralLeg.StepHeight = 0.3f;
-            proceduralLeg.StepSpeed = legs.Count * 2.5f;
+            proceduralLeg.StepSpeed = legs.Count * 5f;
 
             proceduralAnimator.Legs.Add(proceduralLeg);
 
@@ -243,7 +238,6 @@ public class FlockController : MonoBehaviour
         foreach (Transform child in allChildren) {
             if (child.name.Contains("ShoulderBone")) {
                 legs.Add(child.gameObject);
-                Debug.Log(child.name);
             }
         }
 

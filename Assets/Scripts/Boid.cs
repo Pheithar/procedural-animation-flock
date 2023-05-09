@@ -24,13 +24,13 @@ public class Boid : MonoBehaviour
         set { _centeringFactor = value; }
     }
 
-    [SerializeField] private float _protectedRange = 7f;
+    [SerializeField] private float _protectedRange = 10f;
     public float ProtectedRange {
         get { return _protectedRange; }
         set { _protectedRange = value; }
     }
 
-    [SerializeField] private float _visibleRange = 20f;
+    [SerializeField] private float _visibleRange = 30f;
     public float VisibleRange {
         get { return _visibleRange; }
         set { _visibleRange = value; }
@@ -58,6 +58,12 @@ public class Boid : MonoBehaviour
     public bool DrawGizmos {
         get { return _drawGizmos; }
         set { _drawGizmos = value; }
+    }
+
+    [SerializeField] private float _additionalGravity = 5f;
+    public float AdditionalGravity {
+        get { return _additionalGravity; }
+        set { _additionalGravity = value; }
     }
     
     // Variables
@@ -214,7 +220,6 @@ public class Boid : MonoBehaviour
         foreach (Vector3 obstacle in Obstacles) {
             avoidVector += transform.position - obstacle;
         }
-        // Debug.Log(avoidVector);
         return avoidVector;
     }
 
@@ -263,7 +268,7 @@ public class Boid : MonoBehaviour
         }
 
         // // Apply additional gravity
-        // Rb.AddForce(Physics.gravity*AdditionalGravity, ForceMode.Acceleration);
+        Rb.AddForce(Physics.gravity*AdditionalGravity, ForceMode.Acceleration);
         
     }
     

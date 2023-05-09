@@ -47,3 +47,4 @@ MonoBehaviour:
   _numberBoids: 5
   _seed: 42
   _boidPrefab: {fileID: 1871161978958135962, guid: 77ce4fedc7f888f28af19c664dbbab07, type: 3}
+  _path: Bots
