@@ -24,13 +24,13 @@ public class Boid : MonoBehaviour
         set { _centeringFactor = value; }
     }
 
-    [SerializeField] private float _protectedRange = 10f;
+    [SerializeField] private float _protectedRange = 6f;
     public float ProtectedRange {
         get { return _protectedRange; }
         set { _protectedRange = value; }
     }
 
-    [SerializeField] private float _visibleRange = 30f;
+    [SerializeField] private float _visibleRange = 12f;
     public float VisibleRange {
         get { return _visibleRange; }
         set { _visibleRange = value; }
